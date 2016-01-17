@@ -11,8 +11,6 @@
 
 </head>
 <body>
-   <!-- action="/" sends it to the "/" URL on the server 
-       method attribute defines how the data is sent -->
     <form id="myForm"> Input starting and ending Wikipedia Links.
        <br>
         <input id="startLink" type="text" name="start">
@@ -29,6 +27,7 @@
   $(function(){ 
       var spinner;
       $('#myForm').submit(function(event){
+          //prevents form from refreshing and submitting 
           event.preventDefault();
           var opts = {
         lines: 13 // The number of lines to draw

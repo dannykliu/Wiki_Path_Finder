@@ -63,8 +63,7 @@ chokidar.watch('./textfiles/test2.txt').on("change", function(){
     fs.readFile("./textfiles/test2.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
-        }
-        
+        }     
     });
 })
 
