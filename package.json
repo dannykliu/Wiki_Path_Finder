@@ -2,6 +2,10 @@
   "name": "projectxxx",
   "version": "1.0.0",
   "description": "",
+  "engines" :{
+      "node" :"5.4.0",
+      "npm" : "3.3.12"
+  },
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "grunt-cli": "0.1.13"
+    "grunt-cli": "0.1.13",
   },
   "devDependencies": {
     "grunt": "~0.4.5",
