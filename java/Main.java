@@ -91,6 +91,7 @@ public class Main {
         System.out.println("JAVE FILE HAS RUN!!");
 
 //        final Path path = FileSystems.getDefault().getPath(System.getProperty("user.home"), "Desktop");
+        ///Users/dannyliu/Documents/Wikiproject/textfiles/
         final Path path = Paths.get("/Users/dannyliu/Documents/Wikiproject/textfiles/");
         try (final WatchService watchService = FileSystems.getDefault().newWatchService()) {
             final WatchKey watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
