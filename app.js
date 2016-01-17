@@ -6,7 +6,7 @@ let fs = require('fs');
 let watch = require('watch');
 let chokidar = require('chokidar');
 
-let child = require('child_process').spawn('java', ['-jar', 'done.jar']); 
+let child = require('child_process').spawn('java', ['-jar', 'done.jar']);
 
 child.stdout.on('data', function(data) {
     console.log(data.toString());
@@ -48,7 +48,7 @@ fs.watch("./textfiles/link.txt", function(){
 
 var clientSocket;
 io.on('connection', function (socket) {
-    clientSocket = socket; 
+    clientSocket = socket;
 });
 
 chokidar.watch('./textfiles/test.txt').on("change", function(){
@@ -63,7 +63,7 @@ chokidar.watch('./textfiles/test2.txt').on("change", function(){
     fs.readFile("./textfiles/test2.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
-        }     
+        }
     });
 })
 
