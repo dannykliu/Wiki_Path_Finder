@@ -1,7 +1,7 @@
 'use strict'
 module.exports = function(express, app, fs, config){
     
-    let router = express.Router();
+    var router = express.Router();
 
     router.get('/', function(req, res){
         res.render('index', {});

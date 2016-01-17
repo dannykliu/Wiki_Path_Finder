@@ -1,12 +1,11 @@
-'use strict'
-let express = require('express');
-let path = require('path');
-let config = require('./config/config.js');
-let fs = require('fs');
-let watch = require('watch');
-let chokidar = require('chokidar');
+var express = require('express');
+var path = require('path');
+var config = require('./config/config.js');
+var fs = require('fs');
+var watch = require('watch');
+var chokidar = require('chokidar');
 
-let child = require('child_process').spawn('java', ['-jar', 'done.jar']);
+var child = require('child_process').spawn('java', ['-jar', 'done.jar']);
 
 child.stdout.on('data', function(data) {
     console.log(data.toString());
@@ -17,11 +16,11 @@ child.stderr.on("data", function (data) {
 });
 
 
-let app = express();
-let bodyParser = require('body-parser');
+var app = express();
+var bodyParser = require('body-parser');
 //req.body contains key-value pairs of data submitted in the request body. By default, it is undefined, and is populated when you use body-parsing middleware such as body-parser and multer.
-let server = require('http').createServer(app);
-let io = require('socket.io')(server);
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
 
 app.set('views', path.join(__dirname, 'views'));
