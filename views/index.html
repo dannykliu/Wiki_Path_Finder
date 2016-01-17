@@ -6,99 +6,17 @@
 	<link rel="stylesheet" href="/css/main.css">
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/spinner.js"></script>
 
-	<script>
-        'use strict'
-      $(function(){
-          //var host = '{config.host}';
-          var socket = io.connect('http://localhost:3000/link');
-          
-          var articleNames = [];
-          var links = [];
-          
-          //We have to find the index because the Wikipedia API the links of the articles in a random order
-          function findIndex(name, arr){
-              if(name.indexOf(' ')>0){
-                  name = name.substring(0, name.indexOf(' '));
-              }
-              for(var index =0; index < arr.length; index++){
-                  if(arr[index].indexOf(name)>0){
-                      return index;
-                  }
-              }
-              
-              return -1;
-          }
-          
-          socket.on('news', function (data) {
-              //$("#name").html(data);
-              JSON.stringify(data);
-              var articleData = '';
-              for(var i =0; i<data.length; i++){
-                  if (data.charAt(i) !== '\n' && i === data.length -1){
-                        articleData += data.charAt(i);
-                        articleNames.push(articleData);
-                  }
-                  else if(data.charAt(i) !== '\n'){
-                        articleData += data.charAt(i);
-                    //console.log(linkData);
-                  } else {
-                      //console.log(linkData);
-                      articleNames.push(articleData);
-                      articleData = '';
-                  }
-              }
-              for(var i =0; i<articleNames.length; i++){
-                  console.log(articleNames[i]);
-              }
-          });
-          
-          socket.on('news2', function (data) {
-              //$("#link").html(data);
-              JSON.stringify(data);
-              var linkData = '';
-              for(var i =0; i<data.length; i++){
-                  if (data.charAt(i) !== '\n' && i === data.length -1){
-                        linkData += data.charAt(i);
-                        links.push(linkData);
-                  }
-                  else if(data.charAt(i) !== '\n'){
-                        linkData += data.charAt(i);
-                    //console.log(linkData);
-                  } else {
-                      //console.log(linkData);
-                      links.push(linkData);
-                      linkData = '';
-                  }
-              }
-              
-            for(var i =0; i<links.length; i++){
-                  console.log(links[i]);
-              }
 
-//              for(var j =0; j<links.length; j++){
-//                  console.log("Link: " + links[j] + " Article: " + articleNames[j]);
-//              }
-              //Put this here because articleNames gets pushed first 
-              var html = '';
-              for(var j =0; j<links.length; j++){
-                  html += '<a href="'+links[findIndex(articleNames[j], links)]+'">'+articleNames[j]+'</a> <br>';
-                $("#name").html(html);
-              }
-              
-          });
-        
-      });
-            
-    </script>
 </head>
 <body>
    <!-- action="/" sends it to the "/" URL on the server 
        method attribute defines how the data is sent -->
-    <form method="post" action="/link"> Input starting and ending Wikipedia Links.
+    <form id="myForm"> Input starting and ending Wikipedia Links.
        <br>
-        <input type="text" name="start">
-        <input type="text" name="end">
+        <input id="startLink" type="text" name="start">
+        <input id="endLink" type="text" name="end">
         <input type="submit" type="submit">
 
     </form>
@@ -106,4 +24,118 @@
     <br>
     <p id="link"></p>
 </body>
+<script>
+  'use strict'
+  $(function(){ 
+      var spinner;
+      $('#myForm').submit(function(event){
+          event.preventDefault();
+          var opts = {
+        lines: 13 // The number of lines to draw
+        , length: 28 // The length of each line
+        , width: 14 // The line thickness
+        , radius: 42 // The radius of the inner circle
+        , scale: 1 // Scales overall size of the spinner
+        , corners: 1 // Corner roundness (0..1)
+        , color: '#000' // #rgb or #rrggbb or array of colors
+        , opacity: 0.25 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 1 // Rounds per second
+        , trail: 60 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '50%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+        }
+          var target = document.getElementById('name');
+          spinner = new Spinner(opts).spin(target);
+          $.post('/link', {
+              start: document.getElementById('startLink').value,
+              end: document.getElementById('endLink').value
+          }, function(data){
+              var host = data.config.host;
+              var socket = io.connect(host);
+              console.log(host);
+
+              var articleNames = [];
+              var links = [];
+
+              //We have to find the index because the Wikipedia API the links of the articles in a random order
+              function findIndex(name, arr){
+                  if(name.indexOf(' ')>0){
+                      name = name.substring(0, name.indexOf(' '));
+                  }
+                  for(var index =0; index < arr.length; index++){
+                      if(arr[index].indexOf(name)>0){
+                          return index;
+                      }
+                  }
+                  return -1;
+              }
+
+              socket.on('articleNames', function (data) {
+                  //spinner.stop();
+                  //$("#name").html(data);
+                  JSON.stringify(data);
+                  var articleData = '';
+                  for(var i =0; i<data.length; i++){
+                      if (data.charAt(i) !== '\n' && i === data.length -1){
+                            articleData += data.charAt(i);
+                            articleNames.push(articleData);
+                      }
+                      else if(data.charAt(i) !== '\n'){
+                            articleData += data.charAt(i);
+                        //console.log(linkData);
+                      } else {
+                          //console.log(linkData);
+                          articleNames.push(articleData);
+                          articleData = '';
+                      }
+                  }
+                  for(var i =0; i<articleNames.length; i++){
+                      console.log(articleNames[i]);
+                  }
+              });
+
+              socket.on('articleLinks', function (data) {
+                  //$("#link").html(data);
+                  spinner.stop();
+                  JSON.stringify(data);
+                  var linkData = '';
+                  for(var i =0; i<data.length; i++){
+                      if (data.charAt(i) !== '\n' && i === data.length -1){
+                            linkData += data.charAt(i);
+                            links.push(linkData);
+                      }
+                      else if(data.charAt(i) !== '\n'){
+                            linkData += data.charAt(i);
+                        //console.log(linkData);
+                      } else {
+                          //console.log(linkData);
+                          links.push(linkData);
+                          linkData = '';
+                      }
+                  }
+
+                for(var i =0; i<links.length; i++){
+                      console.log(links[i]);
+                  }
+
+                  //Put this here because articleNames gets pushed first 
+                  var html = '';
+                  for(var j =0; j<links.length; j++){
+                      html += '<a href="'+links[findIndex(articleNames[j], links)]+'">'+articleNames[j]+'</a> <br>';
+                    $("#name").html(html);
+                  }
+              });
+          });
+      });
+  });
+
+</script>
 </html>

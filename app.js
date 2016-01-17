@@ -36,65 +36,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 3000);
 app.set('host', config.host);
 
-require('./routes/routes.js')(express, app, fs);
+require('./routes/routes.js')(express, app, fs, config);
+/*
+Reports the event twice. Wow, I can't believe the Node library had a bug...
+fs.watch("./textfiles/link.txt", function(){
+    fs.readFile("./textfiles/test.txt", "utf8", function (error, data) {
+            console.log(data);
+    });
+});
+*/
 
-//Reports the event twice. Wow, I can't believe the Node library had a bug...
-//fs.watch("./textfiles/link.txt", function(){
-//    fs.readFile("./textfiles/test.txt", "utf8", function (error, data) {
-//            console.log(data);
-//    });
-//});
 var clientSocket;
-        io.of('/link').on('connection', function (socket) {
-        console.log("3")
-           clientSocket = socket; 
-        });
+io.on('connection', function (socket) {
+    clientSocket = socket; 
+});
 
 chokidar.watch('./textfiles/test.txt').on("change", function(){
-console.log("1")
     fs.readFile("./textfiles/test.txt", "utf8", function (error, data) {
-        console.log("2")
         if (clientSocket !== undefined) {
-            clientSocket.emit('news', data);
+            clientSocket.emit('articleNames', data);
         }
-        
     });
 })
 
 chokidar.watch('./textfiles/test2.txt').on("change", function(){
     fs.readFile("./textfiles/test2.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
-            clientSocket.emit('news2', data);
+            clientSocket.emit('articleLinks', data);
         }
         
     });
 })
 
-
-//chokidar.watch('./textfiles').on("add", function(){
-//    console.log("File was added!");
-//})
-
 //require('./socket/socket.js')(io, linkData);
-
-
-//watch.watchTree('./textfiles', function (f, curr, prev) {
-//    if (typeof f == "object" && prev === null && curr === null) {
-//          // Finished walking the tree
-//    } else if (prev === null) {
-//      // f is a new file
-//    } else if (curr.nlink === 0) {
-//      // f was removed
-//        fs.readFile("./textfiles/test.txt", "utf8", function (error, data) {
-//            console.log(data);
-//        });
-//    } else {
-//      // f was changed
-//
-//    }
-//  })
-
-
 
 server.listen(app.get('port'), function(){
     console.log('Project XXX working on port: ' + app.get('port'));
