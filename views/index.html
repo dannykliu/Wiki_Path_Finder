@@ -58,7 +58,6 @@
               end: document.getElementById('endLink').value
           }, function(data){
               var host = data.config.host;
-              host = '';
               var socket = io.connect(host);
               console.log(host);
 
