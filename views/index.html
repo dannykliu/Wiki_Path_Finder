@@ -53,6 +53,7 @@
         }
           var target = document.getElementById('name');
           spinner = new Spinner(opts).spin(target);
+          //change our input to upper case
           var start = document.getElementById('startLink').value;
           var end = document.getElementById('endLink').value;
           start = start.toLowerCase().replace(/\b[a-z]/g, function(letter) {
@@ -94,7 +95,15 @@
                   }
                   return false;
               }
-
+              
+              socket.on('tookTooLong', function(data){
+                  spinner.stop();
+                  $('#startLink').val('');
+                  $('#endLink').val('');
+                  $('#name').html('Sorry, your request took too long! Perhaps try something simpler? <br>'
+                                  + 'Hint: Canada -> Albert Einstein');
+              });
+              
               socket.on('articleNames', function (data) {
                   $('#startLink').val('');
                   $('#endLink').val('');
@@ -150,7 +159,7 @@
                   var html = '';
                   console.log(html);
                   for(var j =0; j<links.length; j++){
-                      html += '<a target="_blank" href="'+links[findIndex(articleNames[j], links)]+'">'+articleNames[j]+'</a> <br>';
+                      html += '<a target="_blank" href="'+links[j]+'">'+articleNames[j]+'</a> <br>';
                     $("#name").html(html);
                   }
               });
