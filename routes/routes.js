@@ -11,7 +11,7 @@ module.exports = function(express, app, fs, config){
     //the only time you maintain the post action method in the url is if you do a res.render()
     router.get('/link', function(req, res){
        res.redirect('/'); 
-    })
+    });
     
     router.post('/link', function(req, res){
       var start = req.body.start;
@@ -21,6 +21,7 @@ module.exports = function(express, app, fs, config){
             return console.log(err);
         }
       }); 
+    
         res.send({config: config});
         
        /*

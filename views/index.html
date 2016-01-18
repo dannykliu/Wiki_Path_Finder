@@ -76,24 +76,34 @@
                   }
                   return -1;
               }
+              
+              function exists(arr, element){
+                  for(var i =0; i<arr.length; i++){
+                      if(arr[i] === element){
+                          return true;
+                      } 
+                  }
+                  return false;
+              }
 
               socket.on('articleNames', function (data) {
-                  //spinner.stop();
-                  //$("#name").html(data);
+                  $('#startLink').val('');
+                  $('#endLink').val('');
                   JSON.stringify(data);
-                  console.log(data);
                   var articleData = '';
                   for(var i =0; i<data.length; i++){
                       if (data.charAt(i) !== '\n' && i === data.length -1){
                             articleData += data.charAt(i);
-                            articleNames.push(articleData);
+                            if(!exists(articleNames, articleData)){
+                                articleNames.push(articleData);
+                            }
                       }
                       else if(data.charAt(i) !== '\n'){
                             articleData += data.charAt(i);
-                        //console.log(linkData);
                       } else {
-                          //console.log(linkData);
-                          articleNames.push(articleData);
+                          if(!exists(articleNames, articleData)){
+                              articleNames.push(articleData);
+                          }
                           articleData = '';
                       }
                   }
@@ -103,23 +113,23 @@
               });
 
               socket.on('articleLinks', function (data) {
-                  //$("#link").html(data);
                   spinner.stop();
                   JSON.stringify(data);
-                  console.log(data);
                   var linkData = '';
                   for(var i =0; i<data.length; i++){
                       if (data.charAt(i) !== '\n' && i === data.length -1){
                             linkData += data.charAt(i);
-                            links.push(linkData);
+                            if(!exists(links, linkData)){
+                                links.push(linkData);
+                            }
                       }
                       else if(data.charAt(i) !== '\n'){
                             linkData += data.charAt(i);
-                        //console.log(linkData);
                       } else {
-                          //console.log(linkData);
-                          links.push(linkData);
-                          linkData = '';
+                            if(!exists(links, linkData)){
+                                links.push(linkData);
+                            }
+                            linkData = '';
                       }
                   }
 
@@ -131,10 +141,9 @@
                   var html = '';
                   console.log(html);
                   for(var j =0; j<links.length; j++){
-                      html += '<a href="'+links[findIndex(articleNames[j], links)]+'">'+articleNames[j]+'</a> <br>';
+                      html += '<a target="_blank" href="'+links[findIndex(articleNames[j], links)]+'">'+articleNames[j]+'</a> <br>';
                     $("#name").html(html);
                   }
-                  console.log(html);
               });
           });
       });

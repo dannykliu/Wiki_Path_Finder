@@ -22,8 +22,6 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var child;
-
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -33,7 +31,8 @@ app.engine('html', require('hogan-express'));
 app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('port', process.env.PORT || 3000);
+//change to port 80 so that namecheap can redirect 
+app.set('port', process.env.PORT || 80);
 app.set('host', config.host);
 
 require('./routes/routes.js')(express, app, fs, config, child);
@@ -54,8 +53,8 @@ io.on('connection', function (socket) {
 
 chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
     
-    sleep.usleep(500000);
-    //sleep here
+    //sleep for 0.1 seconds to allow time for Java program to write the contents of the file
+    sleep.usleep(100000);
     fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleNames', data);
@@ -65,9 +64,7 @@ chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
 })
 
 chokidar.watch('./textfiles/outputLinks.txt').on("change", function(){
-    
-    sleep.usleep(500000);
-    //sleep here
+    sleep.usleep(100000);
     fs.readFile("./textfiles/outputLinks.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
