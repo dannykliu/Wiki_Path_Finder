@@ -4,7 +4,7 @@ var config = require('./config/config.js');
 var fs = require('fs');
 var watch = require('watch');
 var chokidar = require('chokidar');
-
+var sleep = require('sleep');
 var child = require('child_process').spawn('java', ['-jar', 'sleep.jar']);
 
 child.stdout.on('data', function(data) {
@@ -53,13 +53,9 @@ io.on('connection', function (socket) {
 
 
 chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
-    fs.readFile('./textfiles/inputTitles.txt', "utf8", function(error, data){
-        console.log("input titles: " + data);
-    });
-    fs.readFile('./textfiles/outputTitles.txt', "utf8", function(error, data){
-        console.log("output titles before: " + data);
-    });
     
+    sleep.usleep(500000);
+    //sleep here
     fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleNames', data);
@@ -69,6 +65,9 @@ chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
 })
 
 chokidar.watch('./textfiles/outputLinks.txt').on("change", function(){
+    
+    sleep.usleep(500000);
+    //sleep here
     fs.readFile("./textfiles/outputLinks.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
