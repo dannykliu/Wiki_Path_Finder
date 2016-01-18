@@ -16,7 +16,7 @@ module.exports = function(express, app, fs, config){
     router.post('/link', function(req, res){
       var start = req.body.start;
       var end = req.body.end;   
-      fs.writeFile("./textfiles/link.txt", start + "\n" + end, function(err) {
+      fs.writeFile("./textfiles/inputTitles.txt", start + "\n" + end, function(err) {
         if(err) {
             return console.log(err);
         }

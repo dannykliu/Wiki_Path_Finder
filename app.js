@@ -32,7 +32,7 @@ app.engine('html', require('hogan-express'));
 app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3000);
 app.set('host', config.host);
 
 require('./routes/routes.js')(express, app, fs, config);
@@ -50,16 +50,16 @@ io.on('connection', function (socket) {
     clientSocket = socket;
 });
 
-chokidar.watch('./textfiles/test.txt').on("change", function(){
-    fs.readFile("./textfiles/test.txt", "utf8", function (error, data) {
+chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
+    fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleNames', data);
         }
     });
 })
 
-chokidar.watch('./textfiles/test2.txt').on("change", function(){
-    fs.readFile("./textfiles/test2.txt", "utf8", function (error, data) {
+chokidar.watch('./textfiles/outputLinks.txt').on("change", function(){
+    fs.readFile("./textfiles/outputLinks.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
         }
