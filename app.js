@@ -22,6 +22,7 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
+var child;
 
 app.set('views', path.join(__dirname, 'views'));
 
@@ -35,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 3000);
 app.set('host', config.host);
 
-require('./routes/routes.js')(express, app, fs, config);
+require('./routes/routes.js')(express, app, fs, config, child);
 /*
 Reports the event twice. Wow, I can't believe the Node library had a bug...
 fs.watch("./textfiles/link.txt", function(){
@@ -54,6 +55,7 @@ chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
     fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleNames', data);
+            console.log('socket articleNames emitted');
         }
     });
 })
@@ -62,6 +64,8 @@ chokidar.watch('./textfiles/outputLinks.txt').on("change", function(){
     fs.readFile("./textfiles/outputLinks.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
+            console.log('socket articleLinks emitted');
+
         }
     });
 })
