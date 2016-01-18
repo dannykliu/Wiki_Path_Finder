@@ -1,2 +1,3 @@
-https://en.wikipedia.org/wiki/Chocolate
-https://en.wikipedia.org/wiki/Candy
+https://en.wikipedia.org/wiki/Mathematics
+https://en.wikipedia.org/wiki/Trigonometry
+https://en.wikipedia.org/wiki/Math
