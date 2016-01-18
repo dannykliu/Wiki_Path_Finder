@@ -5,7 +5,7 @@ var fs = require('fs');
 var watch = require('watch');
 var chokidar = require('chokidar');
 
-var child = require('child_process').spawn('java', ['-jar', 'done.jar']);
+var child = require('child_process').spawn('java', ['-jar', 'sleep.jar']);
 
 child.stdout.on('data', function(data) {
     console.log(data.toString());
