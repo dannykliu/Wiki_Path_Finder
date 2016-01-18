@@ -52,7 +52,7 @@ io.on('connection', function (socket) {
 });
 
 chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
-    fs.readfile('./textfiles/inputTitles.txt', "utf8", function(error, data){
+    fs.readFile('./textfiles/inputTitles.txt', "utf8", function(error, data){
         console.log(data);
     });
     fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
