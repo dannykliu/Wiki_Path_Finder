@@ -59,8 +59,7 @@
           }, function(data){
               var host = data.config.host;
               host = '';
-              var socket = io.connect(host);
-              console.log(host);
+              var socket = io.connect();
 
               var articleNames = [];
               var links = [];
