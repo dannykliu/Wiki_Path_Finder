@@ -51,10 +51,15 @@ io.on('connection', function (socket) {
     clientSocket = socket;
 });
 
+
 chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
     fs.readFile('./textfiles/inputTitles.txt', "utf8", function(error, data){
         console.log(data);
     });
+    fs.readFile('./textfiles/outputTitles.txt', "utf8", function(error, data){
+        console.log(data);
+    });
+    
     fs.readFile("./textfiles/outputTitles.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleNames', data);
@@ -67,7 +72,7 @@ chokidar.watch('./textfiles/outputLinks.txt').on("change", function(){
     fs.readFile("./textfiles/outputLinks.txt", "utf8", function (error, data) {
         if (clientSocket !== undefined) {
             clientSocket.emit('articleLinks', data);
-            console.log('data of outputLinks:' + data);
+            console.log('data of output links:' + data);
         }
     });
 })
