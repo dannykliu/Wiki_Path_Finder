@@ -32,7 +32,7 @@ app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, 'public')));
 //change to port 80 so that namecheap can redirect 
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3000);
 app.set('host', config.host);
 
 require('./routes/routes.js')(express, app, fs, config, child);

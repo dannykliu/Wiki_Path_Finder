@@ -53,9 +53,17 @@
         }
           var target = document.getElementById('name');
           spinner = new Spinner(opts).spin(target);
+          var start = document.getElementById('startLink').value;
+          var end = document.getElementById('endLink').value;
+          start = start.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+          });
+          end = end.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+          });
           $.post('/link', {
-              start: document.getElementById('startLink').value,
-              end: document.getElementById('endLink').value
+              start: start,
+              end: end
           }, function(data){
               var host = data.config.host;
               host = '';
@@ -77,6 +85,7 @@
                   return -1;
               }
               
+              //need this function because sometimes the watch event reports twice 
               function exists(arr, element){
                   for(var i =0; i<arr.length; i++){
                       if(arr[i] === element){
