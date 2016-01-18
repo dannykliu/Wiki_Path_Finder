@@ -56,6 +56,11 @@ chokidar.watch('./textfiles/done.txt').on('change', function(){
     clientSocket.emit('tookTooLong', {});
 })
 
+chokidar.watch('./textfiles/invalid.txt').on('change', function(){
+    console.log('Invalid article!');
+    clientSocket.emit('invalidArticle', {});
+})
+
 chokidar.watch('./textfiles/outputTitles.txt').on("change", function(){
     
     //sleep for 0.1 seconds to allow time for Java program to write the contents of the file

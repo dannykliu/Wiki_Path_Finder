@@ -29,6 +29,40 @@
       $('#myForm').submit(function(event){
           //prevents form from refreshing and submitting 
           event.preventDefault();
+          
+          //remove highlights if they still exist from previous form submissing
+          if($('#startLink').hasClass('missing')){
+              $('#startLink').removeClass('missing');
+          }
+          if($('#endLink').hasClass('missing')){
+              $('#endLink').removeClass('missing');
+          }
+          
+          //check for empty input
+          var start = document.getElementById('startLink').value;
+          var end = document.getElementById('endLink').value;
+          if(start === '' && end == ''){
+              $('#startLink').addClass('missing');
+              $('#endLink').addClass('missing');
+              $('#name').html('Missing parameters not filled!');
+              return;
+          } else if (start === ''){
+              $('#startLink').addClass('missing');
+              $('#name').html('Input starting link!');
+              return;
+          } else if(end === ''){
+              $('#endLink').addClass('missing');
+              $('#name').html('Input ending link!');
+              return;
+          }
+          
+          if(start === end){
+              $('#startLink').val('');
+              $('#endLink').val('');
+              $('#name').html('Please enter different article names!');
+              return;
+          }
+          //create our spinner
           var opts = {
         lines: 13 // The number of lines to draw
         , length: 28 // The length of each line
@@ -53,15 +87,15 @@
         }
           var target = document.getElementById('name');
           spinner = new Spinner(opts).spin(target);
+          
           //change our input to upper case
-          var start = document.getElementById('startLink').value;
-          var end = document.getElementById('endLink').value;
           start = start.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                 return letter.toUpperCase();
           });
           end = end.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                 return letter.toUpperCase();
           });
+
           $.post('/link', {
               start: start,
               end: end
@@ -95,6 +129,13 @@
                   }
                   return false;
               }
+              
+              socket.on('invalidArticle', function(data){
+                  spinner.stop();
+                  $('#startLink').val('');
+                  $('#endLink').val('');
+                  $('#name').html('Please enter valid article names!');
+              })
               
               socket.on('tookTooLong', function(data){
                   spinner.stop();
