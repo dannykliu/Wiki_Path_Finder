@@ -25,6 +25,10 @@
 <script>
   'use strict'
   $(function(){ 
+      function log(args) {
+        Function.prototype.apply.call(console.log, console, args);
+      }
+      log(['hello', 'hello']);
       var spinner;
       $('#myForm').submit(function(event){
           //prevents form from refreshing and submitting 
